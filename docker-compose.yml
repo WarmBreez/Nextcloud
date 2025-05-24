@@ -11,13 +11,13 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
       - POSTGRES_HOST=db
 
-      # 🔧 Upload and memory settings (unlimited upload size)
+      # Upload and memory settings (unlimited upload size)
       - PHP_UPLOAD_LIMIT=0
       - PHP_POST_LIMIT=0
       - NEXTCLOUD_MAX_UPLOAD=0
       - MEMORY_LIMIT=512M
 
-      # 🔧 Redis cache settings
+      # Redis cache settings
       - REDIS_HOST=redis
       - REDIS_HOST_PORT=6379
       
@@ -26,7 +26,7 @@ services:
       - TRUSTED_PROXIES=yours proxy host
       - OVERWRITEHOST=cloud.exemple.com
       - OVERWRITEPROTOCOL=https # or http
-      - OVERWRITECLIURL=https://cloud.exemlpl.com
+      - OVERWRITECLIURL=https://cloud.exemple.com
       - NEXTCLOUD_INIT_HTACCESS=false
 
     volumes:
