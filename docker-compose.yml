@@ -23,10 +23,10 @@ services:
       
       # Nextcloud trusted domains и прокси
       - TRUSTED_DOMAINS=cloud.ivmedis.ru
-      - TRUSTED_PROXIES=192.168.10.169
-      - OVERWRITEHOST=cloud.ivmedis.ru
-      - OVERWRITEPROTOCOL=https
-      - OVERWRITECLIURL=https://cloud.ivmedis.ru
+      - TRUSTED_PROXIES=yours proxy host
+      - OVERWRITEHOST=cloud.exemple.com
+      - OVERWRITEPROTOCOL=https # or http
+      - OVERWRITECLIURL=https://cloud.exemlpl.com
       - NEXTCLOUD_INIT_HTACCESS=false
 
     volumes:
