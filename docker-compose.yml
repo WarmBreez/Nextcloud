@@ -1,0 +1,97 @@
+services:
+  nextcloud:
+    image: nextcloud:31.0.2
+    container_name: nextcloud
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - POSTGRES_DB=nextcloud_db
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+      - POSTGRES_HOST=db
+
+      # 🔧 Upload and memory settings (unlimited upload size)
+      - PHP_UPLOAD_LIMIT=0
+      - PHP_POST_LIMIT=0
+      - NEXTCLOUD_MAX_UPLOAD=0
+      - MEMORY_LIMIT=512M
+
+      # 🔧 Redis cache settings
+      - REDIS_HOST=redis
+      - REDIS_HOST_PORT=6379
+      
+      # Nextcloud trusted domains и прокси
+      - TRUSTED_DOMAINS=cloud.ivmedis.ru
+      - TRUSTED_PROXIES=192.168.10.169
+      - OVERWRITEHOST=cloud.ivmedis.ru
+      - OVERWRITEPROTOCOL=https
+      - OVERWRITECLIURL=https://cloud.ivmedis.ru
+      - NEXTCLOUD_INIT_HTACCESS=false
+
+    volumes:
+      - ./nextcloud_data:/var/www/html
+    depends_on:
+      - db
+      - redis
+    secrets:
+      - pg_password
+    networks:
+      - next_net
+
+  db:
+    image: postgres:16
+    container_name: nextcloud_db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=nextcloud_db
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    secrets:
+      - pg_password
+    networks:
+      - next_net
+
+  redis:
+    image: redis:alpine
+    container_name: nextcloud_redis
+    restart: always
+    volumes:
+      - ./redis_data:/data
+    networks:
+      - next_net
+
+  cron:
+    image: nextcloud:31.0.2
+    container_name: nextcloud_cron
+    restart: unless-stopped
+    entrypoint: "/cron.sh"
+    depends_on:
+      - nextcloud
+    volumes:
+      - ./nextcloud_data:/var/www/html
+    environment:
+      - NEXTCLOUD_CRON_PERIOD=15  # Задаём период выполнения cron задач (в минутах)
+    networks:
+      - next_net
+
+networks:
+  next_net:
+    driver: bridge
+
+
+secrets:
+  pg_password:
+    file: ./secrets/postgres_password
+
+
+volumes:
+  nextcloud_data:
+  db_data:
+  redis_data:
+
+
