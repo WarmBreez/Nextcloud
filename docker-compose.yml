@@ -22,11 +22,11 @@ services:
       - REDIS_HOST_PORT=6379
       
       # Nextcloud trusted domains и прокси
-      - TRUSTED_DOMAINS=cloud.ivmedis.ru
+      - TRUSTED_DOMAINS=yourcloud.exemple.com
       - TRUSTED_PROXIES=yours proxy host
-      - OVERWRITEHOST=cloud.exemple.com
+      - OVERWRITEHOST=yourcloud.exemple.com
       - OVERWRITEPROTOCOL=https # or http
-      - OVERWRITECLIURL=https://cloud.exemple.com
+      - OVERWRITECLIURL=https://yourcloud.exemple.com
       - NEXTCLOUD_INIT_HTACCESS=false
 
     volumes:
